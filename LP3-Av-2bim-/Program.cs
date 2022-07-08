@@ -1,6 +1,7 @@
 using Avaliacao3Bimlp3.Database;
 using Avaliacao3Bimlp3.Repositories;
 using Avaliacao3Bimlp3.Models;
+using Microsoft.Data.Sqlite;
 
 var modelName = args[0];
 var modelAction = args[1];
@@ -10,20 +11,20 @@ new DatabaseSetup(databaseConfig);
 
 if(modelName == "Student")
 {
-    var studentRepository = new StudentRepository(databaseConfig);
+
     if(modelAction == "List")
     {
-        if(studentRepository.existsAnyStudent())
+        if(studentRepository.CountByFormed().Any())
         {
-            Console.WriteLine("Lista de estudantes cadastrados:");
+            Console.WriteLine("There are no registered students");
+        }
+        else
+        {
             foreach (var student in studentRepository.GetAll())
             {
-                Console.WriteLine("Lista de estudantes e suas informações: {0},{1},{2},{3}", student.Registration, student.Name, student.City, student.Former);
+                string situation = (student.Former) ? "formed" : "not formed";
+                Console.WriteLine("{0},{1},{2},{3}", student.Registration, student.Name, student.City, situation);
             } 
-        }
-        else 
-        {
-            Console.WriteLine("Nenhum estudante cadastrado");
         }
     }
 
@@ -32,18 +33,22 @@ if(modelName == "Student")
         var registration = Convert.ToInt32(args[2]);
         var name = args[3];
         var city = args[4];
-        var former = Convert.ToBoolean(args[5]);
 
-        if(studentRepository.existsById(registration))
+        if(studentRepository.StudentExists(registration) == true)
         {
-            Console.WriteLine($"estudante {registration} já existe!");
+            Console.WriteLine("Estudante com id" + registration + "já existe!");
         }
         else 
         {
-            var student = new Student(registration, name, city, former);
-            var result = studentRepository.Save(student);
-            Console.WriteLine("{0}, {1}, {2}, {3}", student.Registration, student.Name, student.City, student.Former);
+            var student = new Student(registration, name, city, false);
+            studentRepository.Save(student);
+            Console.WriteLine("O estudante" + name + "foi cadastrado com sucesso!");
         }
+    }
+
+    if (modelAction == "MarkAsFormed")
+    {
+
     }
 
     if(modelAction == "Delete")
@@ -59,5 +64,30 @@ if(modelName == "Student")
         {
             Console.WriteLine($"Estudante {id} não encontrado!");
         }
+    }
+
+    if (modelAction == "ListByCity")
+    {
+
+    }
+
+    if (modelAction == "ListFormed")
+    {
+
+    }
+
+    if (modelAction == "ListByCities")
+    {
+
+    }
+
+    if (modelAction == "Report")
+    {
+
+    }
+
+    if (modelType == "CountByFormed") 
+    {
+        
     }
 }

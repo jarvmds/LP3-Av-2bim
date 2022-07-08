@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite;
 
-namespace SchoolManager.Database;
+namespace Avaliacao3Bimlp3.Database;
 
 class DatabaseSetup
 {

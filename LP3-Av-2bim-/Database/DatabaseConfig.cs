@@ -1,4 +1,4 @@
-namespace SchoolManager.Database;
+namespace Avaliacao3Bimlp3.Database;
 
 class DatabaseConfig
 {
