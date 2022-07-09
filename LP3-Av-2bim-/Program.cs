@@ -28,7 +28,7 @@ if(modelName == "Student")
         }
     }
 
-     if(modelAction == "New")
+    if(modelAction == "New")
     {
         var registration = Convert.ToInt32(args[2]);
         var name = args[3];
@@ -48,46 +48,121 @@ if(modelName == "Student")
 
     if (modelAction == "MarkAsFormed")
     {
+        string registration = args[2];
 
+        if (studentRepository.StudentExists(registration) == false)
+        {
+            Console.WriteLine("Estudante " + registration + " não encontrado");
+        }
+        else
+        {
+            studentRepository.MarkAsFormed(registration);
+            Console.WriteLine("Estudante " + registration + " definido como formado");
+        }
     }
 
     if(modelAction == "Delete")
     {
-        var id = Convert.ToInt32(args[2]);
+        var registration = Convert.ToInt32(args[2]);
         
-        if(studentRepository.existsById(id))
+        if(studentRepository.StudentExists(registration) == false)
         {
-            studentRepository.Delete(id);
-            Console.WriteLine($" O estudante {id} foi deletado");
+            Console.WriteLine($" O estudante {registration} não encontrado!");
         }
         else 
         {
-            Console.WriteLine($"Estudante {id} não encontrado!");
+            studentRepository.Delete(registration);
+            Console.WriteLine("Estudante " + registration + " removido com sucesso");
         }
     }
 
     if (modelAction == "ListByCity")
     {
+        string city = args[2];
 
+        if (studentRepository.GetAllStudentByCity(city).Any())
+        {
+            Console.WriteLine("Nenhum estudante cadastrado");
+        }
+        else
+        {
+            foreach (var student in studentRepository.GetAllStudentByCity(city))
+            {
+                string situation = (student.Former) ? "formado" : "não formado";
+                Console.WriteLine("{0}, {1}, {2}, {3}", student.Registration, student.Name, student.City, situation);
+            }
+        }
     }
 
     if (modelAction == "ListFormed")
     {
-
+        if (studentRepository.CountByCities().Any())
+        {
+            Console.WriteLine("Nenhum estudante cadastrado");
+        }
+        else
+        {
+            foreach (var student in studentRepository.GetAllFormed())
+            {
+                string situation = (student.Former) ? "formado" : "não formado";
+                Console.WriteLine("{0}, {1}, {2}", student.Name, student.City, situation);
+            }
+        }
     }
 
     if (modelAction == "ListByCities")
     {
+        var cities = args;
+        cities = cities.Where((source, index) => index != 0 && index != 1).ToArray();
 
+        if (studentRepository.GetAllByCities(cities).Any())
+        {
+            Console.WriteLine("Nenhum estudante cadastrado");
+        }
+        else
+        {
+            foreach (var student in studentRepository.GetAllByCities(cities))
+            {
+                string situation = (student.Former) ? "formado" : "não formado";
+                Console.WriteLine("{0}, {1}, {2}, {3}", student.Registration, student.Name, student.City, situation);
+            }
+        }
     }
 
     if (modelAction == "Report")
     {
+        string modelType = args[2];
 
-    }
+        if (modelType == "CountByCities")
+        {
+            if (studentRepository.CountByCities().Any())
+            {
+                Console.WriteLine("Nenhum estudante cadastrado");
+            }
+            else
+            {
+                foreach (var city in studentRepository.CountByCities())
+                {
+
+                    Console.WriteLine("{0}, {1}", city.AttributeName, city.StudentNumber);
+                }
+            }
+        }
 
     if (modelType == "CountByFormed") 
     {
-        
+        if (studentRepository.CountByFormed().Any())
+            {
+                Console.WriteLine("Nenhum estudante cadastrado");
+            }
+            else
+            {
+                foreach (var former in studentRepository.CountByFormed())
+                {
+                    string situation = (former.AttributeName == "0") ? "Formados" : "Não formados";
+                    Console.WriteLine("{0}, {1}", situation, former.StudentNumber);
+                }
+            }
+        }        
     }
 }

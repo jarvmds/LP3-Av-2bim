@@ -1,6 +1,5 @@
 namespace Avaliacao3Bimlp3.Models;
 
-
 class CountStudentGroupByAttribute
 {
     public string AttributeName { get; set; }
