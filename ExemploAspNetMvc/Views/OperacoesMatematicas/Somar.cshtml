@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Somar";
+}
+
+<h1 class="display-4">Operação Matemática Somar</h1>
+<p>Utilize o formulário abaixo para somar dois números</p>
+
+<form action="ResultadoSomar" method="post">
+    <p>
+        <label for="numero1">Número 1</label>
+        <input type="text" name="numero1" id="numero1" >
+    </p>
+    <p>
+        <label for="numero2">Número 2</label>
+        <input type="text" name="numero2" id="numero2" >
+    </p>
+    <p>
+        <input type="submit" value="Somar">
+    </p>
+</form>
